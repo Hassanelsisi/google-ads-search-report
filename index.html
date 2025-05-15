@@ -1,1 +1,66 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Docs placeholder</title></head><body><h1>Placeholder</h1></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Google Ads Search-Campaign Reporting Script</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:900px;margin:0 auto;padding:32px;line-height:1.55}
+h1,h2{color:#0b5394;margin-top:1.6em}
+pre{background:#f5f5f5;border:1px solid #ddd;padding:12px;overflow:auto}
+table{border-collapse:collapse;margin:16px 0;width:100%}th,td{border:1px solid #ccc;padding:6px 10px}
+.color{display:inline-block;width:1.4em;height:1.4em;margin-right:6px;border:1px solid #999;vertical-align:middle}
+</style>
+</head>
+<body>
+<h1>Google Ads Search-Campaign Reporting Script</h1>
+
+<p>This repository provides:</p>
+<ul>
+<li><code>search-report.gs</code> – a read-only Google Ads Script that creates an 8-tab Google Sheet.</li>
+<li><code>index.html</code>      – these docs (renders automatically on GitHub Pages).</li>
+</ul>
+
+<h2>Quick Start</h2>
+<ol>
+<li>Open <b>Google Ads → Tools → Bulk actions → Scripts</b> and paste <code>search-report.gs</code>.</li>
+<li>Replace <code>SPREADSHEET_ID</code> with an empty Google Sheet’s ID.</li>
+<li>Preview → Authorise → Run once.  Schedule to refresh daily.</li>
+</ol>
+
+<h2>Customise Brand Detection</h2>
+<p>Edit <code>BRAND_PATTERNS</code> near the top of the script:</p>
+<pre><code>const BRAND_PATTERNS = [
+  /mybrand/i,    // ASCII
+  /ماي براند/i   // Arabic
+];</code></pre>
+
+<h2>CONFIG Keys</h2>
+<table>
+<thead><tr><th>Key</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>CLICK_THRESHOLD</code></td><td>Clicks before a keyword / term can be excluded.</td></tr>
+<tr><td><code>CTR_HIGH</code> / <code>CTR_LOW</code></td><td>High / Low CTR boundaries.</td></tr>
+<tr><td><code>CPC_MULTIPLIER</code></td><td>High-CPC flag if Avg CPC &gt; multiplier × average.</td></tr>
+<tr><td><code>CPA_MULTIPLIER</code></td><td>High-CPA flag if CPA &gt; multiplier × average.</td></tr>
+</tbody></table>
+
+<h2>Colour Legend</h2>
+<table>
+<tr><td><span class="color" style="background:#c8e6c9"></span></td><td>Good / Add / Keep / Highest CTR / Lowest CPC</td></tr>
+<tr><td><span class="color" style="background:#ffcdd2"></span></td><td>Exclude / Pause / Lowest CTR / Highest CPC</td></tr>
+<tr><td><span class="color" style="background:#ffe0b2"></span></td><td>Review</td></tr>
+<tr><td><span class="color" style="background:#fff9c4"></span></td><td>High CPC</td></tr>
+<tr><td><span class="color" style="background:#bbdefb"></span></td><td>Low CPC</td></tr>
+</table>
+
+<h2>Contributing</h2>
+<ol>
+<li>Fork the repo and create a feature branch.</li>
+<li>Test your changes in Google Ads preview.</li>
+<li>Open a pull request with details and sample log output.</li>
+</ol>
+
+<p style="margin-top:3em;font-size:85%">License: MIT</p>
+</body>
+</html>
