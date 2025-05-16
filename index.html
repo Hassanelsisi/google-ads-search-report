@@ -5,62 +5,100 @@
 <title>Google Ads Search-Campaign Reporting Script</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;max-width:900px;margin:0 auto;padding:32px;line-height:1.55}
+/* — Layout — */
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  max-width:900px;
+  margin:0 auto;
+  padding:32px;
+  line-height:1.55;
+  color:#222;
+}
 h1,h2{color:#0b5394;margin-top:1.6em}
 pre{background:#f5f5f5;border:1px solid #ddd;padding:12px;overflow:auto}
-table{border-collapse:collapse;margin:16px 0;width:100%}th,td{border:1px solid #ccc;padding:6px 10px}
-.color{display:inline-block;width:1.4em;height:1.4em;margin-right:6px;border:1px solid #999;vertical-align:middle}
+
+/* — Tables — */
+table{border-collapse:collapse;margin:16px 0;width:100%}
+th,td{border:1px solid #ccc;padding:6px 10px;text-align:left}
+thead{background:#fafafa}
+
+/* — Colour squares — */
+.color{
+  display:inline-block;
+  width:1.4em;
+  height:1.4em;
+  margin-right:6px;
+  border:1px solid #999;
+  vertical-align:middle;
+}
 </style>
 </head>
+
 <body>
 <h1>Google Ads Search-Campaign Reporting Script</h1>
 
-<p>This repository provides:</p>
-<ul>
-<li><code>search-report.gs</code> – a read-only Google Ads Script that creates an 8-tab Google Sheet.</li>
-<li><code>index.html</code>      – these docs (renders automatically on GitHub Pages).</li>
-</ul>
+<p>
+This project provides a single, read-only Google Ads Script that creates a fully
+formatted, multi-tab Google Sheet in Drive—no APIs, add-ons, or manual
+spreadsheet work required.
+</p>
 
-<h2>Quick Start</h2>
+<h2>What you get</h2>
+<table>
+<thead><tr><th>Sheet tab</th><th>Highlights</th></tr></thead>
+<tbody>
+<tr><td><b>README</b></td><td>Purpose of each tab • colour legend • disclaimer</td></tr>
+<tr><td><b>CONFIG</b></td><td>Edit thresholds without touching code</td></tr>
+<tr><td><b>Overview</b></td><td>Clicks · CTR · CPC · CPA · ROAS (currency auto-detected)</td></tr>
+<tr><td><b>Heatmap</b></td><td>Day × Hour grids (Clicks · CTR · CPC · Conversions · CPA)</td></tr>
+<tr><td><b>Strategy</b></td><td>Rule tips • device CPA gaps • live Google-Ads recommendations</td></tr>
+<tr><td><b>Ads</b></td><td>Enabled ads — colour-coded Keep / Test / Pause with advice</td></tr>
+<tr><td><b>Campaign-KW</b></td><td>Full keyword list, Quality Score, Top-10 & Bottom-10 sections, actions</td></tr>
+<tr><td><b>Search Terms</b></td><td>Brand-aware Add / Review / Exclude</td></tr>
+</tbody>
+</table>
+
+<h2>Quick Start (3 steps)</h2>
 <ol>
-<li>Open <b>Google Ads → Tools → Bulk actions → Scripts</b> and paste <code>search-report.gs</code>.</li>
-<li>Replace <code>SPREADSHEET_ID</code> with an empty Google Sheet’s ID.</li>
-<li>Preview → Authorise → Run once.  Schedule to refresh daily.</li>
+  <li>Open <strong>Google Ads → Tools → Bulk actions → Scripts</strong> and paste <code>search-report.gs</code>.</li>
+  <li>Replace <code>SPREADSHEET_ID</code> (top of the script) with the ID of a blank Sheet.</li>
+  <li>Click <b>Preview → Authorise → Run</b> once, then schedule (e.g. 06:00 • 14:00 • 22:00) for automatic refresh.</li>
 </ol>
 
-<h2>Customise Brand Detection</h2>
-<p>Edit <code>BRAND_PATTERNS</code> near the top of the script:</p>
-<pre><code>const BRAND_PATTERNS = [
-  /mybrand/i,    // ASCII
-  /ماي براند/i   // Arabic
-];</code></pre>
-
-<h2>CONFIG Keys</h2>
-<table>
-<thead><tr><th>Key</th><th>Description</th></tr></thead>
-<tbody>
-<tr><td><code>CLICK_THRESHOLD</code></td><td>Clicks before a keyword / term can be excluded.</td></tr>
-<tr><td><code>CTR_HIGH</code> / <code>CTR_LOW</code></td><td>High / Low CTR boundaries.</td></tr>
-<tr><td><code>CPC_MULTIPLIER</code></td><td>High-CPC flag if Avg CPC &gt; multiplier × average.</td></tr>
-<tr><td><code>CPA_MULTIPLIER</code></td><td>High-CPA flag if CPA &gt; multiplier × average.</td></tr>
-</tbody></table>
-
-<h2>Colour Legend</h2>
+<h2>Colour legend</h2>
 <table>
 <tr><td><span class="color" style="background:#c8e6c9"></span></td><td>Good / Add / Keep / Highest CTR / Lowest CPC</td></tr>
 <tr><td><span class="color" style="background:#ffcdd2"></span></td><td>Exclude / Pause / Lowest CTR / Highest CPC</td></tr>
 <tr><td><span class="color" style="background:#ffe0b2"></span></td><td>Review</td></tr>
-<tr><td><span class="color" style="background:#fff9c4"></span></td><td>High CPC</td></tr>
-<tr><td><span class="color" style="background:#bbdefb"></span></td><td>Low CPC</td></tr>
+<tr><td><span class="color" style="background:#fff9c4"></span></td><td>High CPC (above multiplier)</td></tr>
+<tr><td><span class="color" style="background:#bbdefb"></span></td><td>Low CPC (below average)</td></tr>
 </table>
+
+<h2>CONFIG keys (edit inside the Sheet)</h2>
+<table>
+<thead><tr><th>Key</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>CLICK_THRESHOLD</code></td><td>Clicks before a keyword or term can be excluded</td></tr>
+<tr><td><code>CTR_HIGH</code> / <code>CTR_LOW</code></td><td>Bounds that trigger High / Low CTR tips</td></tr>
+<tr><td><code>CPC_MULTIPLIER</code></td><td>High-CPC flag if Avg CPC &gt; multiplier × account average</td></tr>
+<tr><td><code>CPA_MULTIPLIER</code></td><td>High-CPA flag if CPA &gt; multiplier × account average</td></tr>
+</tbody>
+</table>
+
+<h2>Customise Brand Detection</h2>
+<p>Edit <code>BRAND_PATTERNS</code> near the top of the script:</p>
+<pre><code>const BRAND_PATTERNS = [
+  /mybrand/i,      // ASCII
+  /ماي براند/i     // Arabic
+];</code></pre>
 
 <h2>Contributing</h2>
 <ol>
-<li>Fork the repo and create a feature branch.</li>
-<li>Test your changes in Google Ads preview.</li>
-<li>Open a pull request with details and sample log output.</li>
+  <li>Fork the repo and create a feature branch.</li>
+  <li>Test your change in a preview run.</li>
+  <li>Open a pull request with details and example output.</li>
 </ol>
 
-<p style="margin-top:3em;font-size:85%">License: MIT</p>
+<p style="margin-top:3em;font-size:85%">License : MIT</p>
 </body>
 </html>
